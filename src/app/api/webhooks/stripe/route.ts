@@ -1,6 +1,5 @@
 import { sendWorkflowExecution } from "@/inngest/utils";
 import { NextRequest, NextResponse } from "next/server";
-import { timeStamp } from "node:console";
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,31 +18,30 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
-    const formData = {
-      formId: body.formId,
-      formTitle: body.formTitle,
-      responseId: body.responseId,
-      timeStamp: body.timeStamp,
-      respondentEmail: body.respondentEmail,
-      responses: body.responses,
-      raw: body,
+    const stripeData = {
+      // Event metadata
+      eventId: body.id,
+      eventType: body.type,
+      timestamp: body.created,
+      livemode: body.livemode,
+      raw: body.data?.object,
     };
 
     await sendWorkflowExecution({
       workflowId,
       initialData: {
-        googleForm: formData,
+        stripe: stripeData,
       },
     });
-
+    
     return NextResponse.json(
       { success: true },
       { status: 200 },
     );
   } catch (error) {
-    console.error("Google form webhook error:", error);
+    console.error("Stripe webhook error:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to process GoogleForm submission" },
+      { success: false, error: "Failed to process Stripe event" },
       { status: 500 }
     );
   }
