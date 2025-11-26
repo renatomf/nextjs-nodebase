@@ -40,15 +40,15 @@ export const AppSidebar = () => {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenuItem>
-          <SidebarMenuButton asChild className="gap-x-4 h-10 px-4">
+          <SidebarMenuButton asChild className="gap-x-3 h-10 px-4">
             <Link href="/" prefetch>
               <Image 
                 src="/logos/logo.svg"
                 alt="Nodebase"
-                width={30}
-                height={30}
+                width={36}
+                height={36}
               />
-              <span className="font-semibold text-sm">Nodebase</span>
+              <span className="font-semibold text-md">Nodebase</span>
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>

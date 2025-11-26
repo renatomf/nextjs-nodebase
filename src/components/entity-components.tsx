@@ -204,7 +204,7 @@ export const EmptyView = ({ message, onNew }: EmptyViewProps) => {
       {!!message && <EmptyDescription>{message}</EmptyDescription>}
       {!!onNew && (
         <EmptyContent>
-          <Button onClick={() => onNew}>Add item</Button>
+          <Button onClick={() => onNew?.()}>Add item</Button>
         </EmptyContent>
       )}
     </Empty>
