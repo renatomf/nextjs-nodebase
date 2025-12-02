@@ -10,7 +10,7 @@ import { useEntitySearch } from "@/hooks/use-entity-search";
 
 import { WorkflowIcon } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import type { Workflow } from "@/generated/prisma/client";
+import type { Workflow } from "@/generated/prisma/browser";
 
 
 export const WorkflowsSearch = () => {
