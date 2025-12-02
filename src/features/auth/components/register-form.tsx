@@ -5,8 +5,21 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -14,15 +27,16 @@ import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import Image from "next/image";
 
-const registerSchema = z.object({
-  email: z.email("Please enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
-  confirmPassword: z.string(),
-})
-.refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const registerSchema = z
+  .object({
+    email: z.email("Please enter a valid email address"),
+    password: z.string().min(1, "Password is required"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
@@ -37,6 +51,38 @@ export function RegisterForm() {
       confirmPassword: "",
     },
   });
+
+  const signInGithub = async () => {
+    await authClient.signIn.social(
+      {
+        provider: "github",
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: () => {
+          toast.error("Something went wrong");
+        },
+      }
+    );
+  };
+
+  const signInGoogle = async () => {
+    await authClient.signIn.social(
+      {
+        provider: "google",
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: () => {
+          toast.error("Something went wrong");
+        },
+      }
+    );
+  };
 
   const onSubmit = async (values: RegisterFormValues) => {
     await authClient.signUp.email(
@@ -53,8 +99,8 @@ export function RegisterForm() {
         onError: (ctx) => {
           toast.error(ctx.error.message);
         },
-      },
-    )
+      }
+    );
   };
 
   const isPending = form.formState.isSubmitting;
@@ -63,12 +109,8 @@ export function RegisterForm() {
     <div className="flex flex-col gap-6">
       <Card>
         <CardHeader>
-          <CardTitle>
-            Get Started
-          </CardTitle>
-          <CardDescription>
-            Create your account to get started
-          </CardDescription>
+          <CardTitle>Get Started</CardTitle>
+          <CardDescription>Create your account to get started</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -76,11 +118,11 @@ export function RegisterForm() {
               <div className="grid gap-6">
                 <div className="flex flex-col gap-4">
                   <Button
+                    onClick={signInGithub}
                     variant="outline"
                     className="w-full"
                     type="button"
                     disabled={isPending}
-
                   >
                     <Image
                       src="/logos/github.svg"
@@ -91,11 +133,11 @@ export function RegisterForm() {
                     Continue with GitHub
                   </Button>
                   <Button
+                    onClick={signInGoogle}
                     variant="outline"
                     className="w-full"
                     type="button"
                     disabled={isPending}
-
                   >
                     <Image
                       src="/logos/google.svg"
@@ -107,14 +149,14 @@ export function RegisterForm() {
                   </Button>
                 </div>
                 <div className="grid gap-6">
-                  <FormField 
+                  <FormField
                     control={form.control}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input 
+                          <Input
                             type="email"
                             placeholder="m@example.com"
                             {...field}
@@ -125,14 +167,14 @@ export function RegisterForm() {
                     )}
                   />
 
-                  <FormField 
+                  <FormField
                     control={form.control}
                     name="password"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input 
+                          <Input
                             type="password"
                             placeholder="********"
                             {...field}
@@ -143,14 +185,14 @@ export function RegisterForm() {
                     )}
                   />
 
-                  <FormField 
+                  <FormField
                     control={form.control}
                     name="confirmPassword"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Confirm password</FormLabel>
                         <FormControl>
-                          <Input 
+                          <Input
                             type="password"
                             placeholder="********"
                             {...field}
@@ -160,20 +202,13 @@ export function RegisterForm() {
                       </FormItem>
                     )}
                   />
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={isPending}
-                  >
+                  <Button type="submit" className="w-full" disabled={isPending}>
                     Sign up
                   </Button>
                 </div>
                 <div className="text-center text-sm">
                   Already have an account?{" "}
-                  <Link 
-                    href="/login" 
-                    className="undeline underline-offset-4"
-                  >
+                  <Link href="/login" className="undeline underline-offset-4">
                     Login
                   </Link>
                 </div>
@@ -183,5 +218,5 @@ export function RegisterForm() {
         </CardContent>
       </Card>
     </div>
-  )
-};
+  );
+}

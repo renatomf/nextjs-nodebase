@@ -5,8 +5,21 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -32,12 +45,44 @@ export function LoginForm() {
     },
   });
 
+  const signInGithub = async () => {
+    await authClient.signIn.social(
+      {
+        provider: "github",
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: () => {
+          toast.error("Something went wrong");
+        },
+      }
+    );
+  };
+
+  const signInGoogle = async () => {
+    await authClient.signIn.social(
+      {
+        provider: "google",
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: () => {
+          toast.error("Something went wrong");
+        },
+      }
+    );
+  };
+
   const onSubmit = async (values: LoginFormValues) => {
     await authClient.signIn.email(
       {
         email: values.email,
         password: values.password,
-        callbackURL: "/", 
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
@@ -46,8 +91,8 @@ export function LoginForm() {
         onError: (ctx) => {
           toast.error(ctx.error.messageq);
         },
-      },
-    )
+      }
+    );
   };
 
   const isPending = form.formState.isSubmitting;
@@ -56,12 +101,8 @@ export function LoginForm() {
     <div className="flex flex-col gap-6">
       <Card>
         <CardHeader>
-          <CardTitle>
-            Welcome back
-          </CardTitle>
-          <CardDescription>
-            Login to continue
-          </CardDescription>
+          <CardTitle>Welcome back</CardTitle>
+          <CardDescription>Login to continue</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -69,13 +110,13 @@ export function LoginForm() {
               <div className="grid gap-6">
                 <div className="flex flex-col gap-4">
                   <Button
+                    onClick={signInGithub}
                     variant="outline"
                     className="w-full"
                     type="button"
                     disabled={isPending}
-
                   >
-                    <Image 
+                    <Image
                       src="/logos/github.svg"
                       alt="GitHub"
                       width={20}
@@ -84,13 +125,13 @@ export function LoginForm() {
                     Continue with GitHub
                   </Button>
                   <Button
+                    onClick={signInGoogle}
                     variant="outline"
                     className="w-full"
                     type="button"
                     disabled={isPending}
-
                   >
-                    <Image 
+                    <Image
                       src="/logos/google.svg"
                       alt="Google"
                       width={20}
@@ -100,14 +141,14 @@ export function LoginForm() {
                   </Button>
                 </div>
                 <div className="grid gap-6">
-                  <FormField 
+                  <FormField
                     control={form.control}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input 
+                          <Input
                             type="email"
                             placeholder="m@example.com"
                             {...field}
@@ -118,14 +159,14 @@ export function LoginForm() {
                     )}
                   />
 
-                  <FormField 
+                  <FormField
                     control={form.control}
                     name="password"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input 
+                          <Input
                             type="password"
                             placeholder="********"
                             {...field}
@@ -135,20 +176,13 @@ export function LoginForm() {
                       </FormItem>
                     )}
                   />
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={isPending}
-                  >
+                  <Button type="submit" className="w-full" disabled={isPending}>
                     Login
                   </Button>
                 </div>
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{" "}
-                  <Link 
-                    href="/signup" 
-                    className="undeline underline-offset-4"
-                  >
+                  <Link href="/signup" className="undeline underline-offset-4">
                     Sign up
                   </Link>
                 </div>
@@ -158,5 +192,5 @@ export function LoginForm() {
         </CardContent>
       </Card>
     </div>
-  )
-};
+  );
+}
