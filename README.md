@@ -115,26 +115,6 @@ prisma/
 - **Credential** — an encrypted value tied to an integration type, reusable across nodes.
 - **Execution** — a single run of a workflow, tracking status, timing, error details and output.
 
-## Getting started
-
-### Prerequisites
-
-- Node.js 18+
-- A PostgreSQL database
-- Accounts for the AI providers and integrations you plan to use (e.g. OpenAI, Anthropic, Google, Discord, Slack, Stripe)
-
-### Environment variables
-
-This project requires credentials for the database, authentication, AI providers, integrations and billing. Create a local `.env` file with your own values (never commit it or share real credentials) before running the app.
-
-### Installation
-
-```bash
-npm install
-npm run dev:all
-```
-
-The `dev:all` script runs the Next.js dev server together with the background job runner. Open [http://localhost:3000](http://localhost:3000) to see the app.
 
 ## Available scripts
 
@@ -150,11 +130,3 @@ The `dev:all` script runs the Next.js dev server together with the background jo
 | `db:studio` | Opens Prisma Studio |
 | `inngest:dev` | Runs the background job development server |
 | `dev:all` | Runs the app and background job server together |
-
-## Deployment
-
-The easiest way to deploy this app is with [Vercel](https://vercel.com). Background workflow executions require a background job runner (self-hosted or cloud-hosted) to be configured alongside the deployment, in addition to all required environment variables.
-
-## License
-
-Specify a license here (e.g. MIT) if you want the project to be reusable by others.
